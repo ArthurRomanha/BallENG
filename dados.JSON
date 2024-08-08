@@ -1,0 +1,22 @@
+{
+    "words" : [
+        {
+            "name": "Light",
+            "image": "",
+            "mean": "Luz",
+            "linkTranslator": ""
+        },
+        {
+            "name": "Country",
+            "image": "",
+            "mean": "País",
+            "linkTranslator": ""
+        },
+        {
+            "name": "Picture",
+            "image": "",
+            "mean": "Foto",
+            "linkTranslator": ""
+        }
+    ]
+}
