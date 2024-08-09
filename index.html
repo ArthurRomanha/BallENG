@@ -7,13 +7,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
 </head>
 <header></header>
+
 <body>
-    <button onclick="winGame()">Teste</button>
+    <h1 class="gameName">BOLID<span class="red">ENG</span></h1>
+    <section class="screens">
+        <h3 class="secondScreen" id="instructions">Instructions:</h3>
+        <div id="selectDifficult">
+            <button class="difficult" onclick="game()">Fácil</button> 
+            <button class="difficult" onclick="game()">Médio</button>
+            <button class="difficult" onclick="game()">Difícil</button>
+        </div>
+        <p class="secondScreen" id="instructionsDescription">Use a seta para a esquerda e para a direita para mover o
+            cursor e use a barra de espaço para atirar</p>
+        <button id="continue" onclick="nextScreen()">Continue</button>
+    </section>
+
+    <canvas width="450px" height="450px"></canvas>
     <div class="victory"></div>
     <script src="script.js"></script>
 </body>
 <footer></footer>
+
 </html>
