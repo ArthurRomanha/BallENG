@@ -4,6 +4,7 @@ const secondScreen = document.querySelectorAll(".secondScreen");
 const selectDifficult = document.querySelectorAll("#selectDifficult");
 const instructionsDescription = document.querySelector("#instructionsDescription");
 const btnContinue = document.querySelector("#continue");
+const ship = document.querySelectorAll("#ship");
 
 let screen = 1;
 
@@ -41,5 +42,6 @@ const winGame = () => {
 const game = () => {
     divScreens.style.display = "none";
     canvas.style.display = "block";
+    ctx.drawImage(ship, 30, 30, 30, 30);
     
 }
