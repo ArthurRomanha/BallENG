@@ -28,7 +28,16 @@ const nextScreen = () => {
             break;
     }
 }
-
+const drawShoot = () => {
+    if (shootExist == true) {
+        ctx.fillStyle = "white";
+        shoot = ctx.fillRect(xShoot, yShoot, 5, 15);
+        yShoot -= 15;
+    } else {
+        yShoot = yShip;
+        shootExist = true;
+    }
+}
 const winGame = () => {
     fetch("dados.JSON").then((response) => {
         response.json().then((object) => {
@@ -44,4 +53,23 @@ const game = () => {
     canvas.style.display = "block";
     ctx.drawImage(ship, 30, 30, 30, 30);
     
+    drawShoot();
+
 }
+document.addEventListener('keydown', function (tecla) {
+    switch (tecla.keyCode) {
+        case 39://right
+            if (xShip < canvas.width - spriteSize) {
+                xShip += 30;
+            }
+            break;
+        case 37://left
+            if (xShip > 0) { xShip -= 30; }
+            break;
+        case 32:
+            if (shootExist == false) {
+                shootExist = true;
+            }
+            break;
+    }
+});
