@@ -68,6 +68,13 @@ const words = [
         "linkTranslator": ""
     }
 ]
+const preSetBolides = () => {
+    let bolide
+}
+let bolides = [
+    {},
+    {}
+]
 let loopId;
 let screen = 1;
 
@@ -88,20 +95,6 @@ let widthShoot = 5;
 let xShoot = xShip + spriteSize / 2 - widthShoot / 2;
 let yShoot = yShip;
 let shootExist = false;
-const randomXBolide = () => {
-    let x = Math.floor(Math.random()*30);
-    while (!(x>0||x<canvas.width)){
-        x = Math.floor(Math.random()*30);
-    }
-    return x;
-}
-const randomYBolide = () => {    
-    let y = Math.floor(Math.random()*30);
-    while (!(y>0||x<canvas.height)) {
-        y = Math.floor(Math.random()*30);
-    }
-    return y;
-}
 
 const drawShoot = () => {
     if (shootExist == true) {
@@ -113,12 +106,13 @@ const drawShoot = () => {
         shootExist = true;
     }
 }
-// const drawBolides = () => {
-//     for (let letter of randomWord.name){
-//         ctx.drawImage(document.getElementById(`meteor${letter}`, randomXBolide(), randomYBolide()));
-//     }
-// }
-// drawBolides();
+
+const drawBolides = () => {
+    for (let letter of randomWord.name){
+
+        
+    }
+}
 const winGame = () => {
     fetch("dados.JSON").then((response) => {
         response.json().then((object) => {
@@ -158,6 +152,7 @@ const game = () => {
     // randomWord();
     initSprites();
     drawGrid();
+    drawBolides();
 
     if (yShoot > 0) {
         drawShoot();

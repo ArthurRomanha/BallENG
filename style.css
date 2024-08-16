@@ -21,6 +21,9 @@ h1{
 .secondScreen{
     visibility: hidden;
 }
+.bolides{
+    display: none;
+}
 #selectDifficult{
     visibility: hidden;
     display: flex;
