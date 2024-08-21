@@ -68,13 +68,39 @@ const words = [
         "linkTranslator": ""
     }
 ]
-const preSetBolides = () => {
-    let bolide
-}
 let bolides = [
-    {},
-    {}
-]
+];
+const randomX = () => {
+    return Math.floor(Math.random() * 15) * 30;
+}
+const randomY = () => {
+    return Math.floor(Math.random() * 10) * 30;
+}
+const randomHorizontalDirection = () => {
+    if (Math.floor(Math.random() * 2) == 0) {
+        return "right"
+    } else {
+        return "left"
+    }
+}
+const randomVerticalDirection = () => {
+    if (Math.floor(Math.random() * 2) == 0) {
+        return "up"
+    } else {
+        return "down"
+    }
+}
+let randomWord = words[(Math.floor(Math.random() * 10))].name;
+for (let letter of randomWord) {
+    bolides.push({
+        letter: `${letter}`,
+        x: randomX(),
+        y: randomY(),
+        horizontalDirection: randomHorizontalDirection(),
+        verticalDirection: randomVerticalDirection()
+    })
+}
+console.log(bolides);
 let loopId;
 let screen = 1;
 
@@ -82,7 +108,6 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 
-let randomWord = words[(Math.floor(Math.random()*10))];
 
 let spriteSize = 30;
 
@@ -104,13 +129,6 @@ const drawShoot = () => {
     } else {
         yShoot = yShip;
         shootExist = true;
-    }
-}
-
-const drawBolides = () => {
-    for (let letter of randomWord.name){
-
-        
     }
 }
 const winGame = () => {
@@ -139,20 +157,42 @@ const drawGrid = () => {
         ctx.stroke();
     }
 }
-const initSprites = () => {
+const drawSprites = () => {
     divScreens.style.display = "none";
     canvas.style.display = "block";
     ctx.drawImage(ship, xShip, yShip, 30, 30);
+    for (let bolide of bolides) {
+        ctx.drawImage(document.getElementById(`meteor${bolide.letter}`), bolide.x, bolide.y, 30, 30);
+    }
+}
+const moveBolides = () => {
+    for (let bolide of bolides) {
+        switch (bolide.verticalDirection) {
+            case "up":
+                bolide.y -= 30;
+                break;
+            case "down":
+                bolide.y += 30;
+                break;
+        }
+        switch (bolide.horizontalDirection) {
+            case "left":
+                bolide.x -= 30;
+                break;
+            case "right":
+                bolide.x += 30;
+                break;
+        }
+    }
 }
 const game = () => {
     clearInterval(loopId);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // randomWord();
-    initSprites();
+    drawSprites();
+    moveBolides();
     drawGrid();
-    drawBolides();
 
     if (yShoot > 0) {
         drawShoot();
