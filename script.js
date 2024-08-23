@@ -76,18 +76,24 @@ const randomX = () => {
 const randomY = () => {
     return Math.floor(Math.random() * 10) * 30;
 }
-const randomHorizontalDirection = () => {
-    if (Math.floor(Math.random() * 2) == 0) {
-        return "right"
-    } else {
-        return "left"
-    }
-}
-const randomVerticalDirection = () => {
-    if (Math.floor(Math.random() * 2) == 0) {
-        return "up"
-    } else {
-        return "down"
+const randomDirection = () => {
+    switch (Math.floor(Math.random() * 8)) {
+        case 0:
+            return 0;
+        case 1:
+            return 45;
+        case 2:
+            return 90;
+        case 3:
+            return 135;
+        case 4:
+            return 180;
+        case 5:
+            return -135;
+        case 6:
+            return -90;
+        case 7:
+            return -45;
     }
 }
 let randomWord = words[(Math.floor(Math.random() * 10))].name;
@@ -96,8 +102,7 @@ for (let letter of randomWord) {
         letter: `${letter}`,
         x: randomX(),
         y: randomY(),
-        horizontalDirection: randomHorizontalDirection(),
-        verticalDirection: randomVerticalDirection()
+        directon: randomDirection()
     })
 }
 console.log(bolides);
@@ -167,21 +172,58 @@ const drawSprites = () => {
 }
 const moveBolides = () => {
     for (let bolide of bolides) {
-        switch (bolide.verticalDirection) {
-            case "up":
-                bolide.y -= 30;
-                break;
-            case "down":
-                bolide.y += 30;
-                break;
+        if (bolide.y > 0 && bolide.y < canvas.height && bolide.x > 0 && bolide.x < canvas.width)
+            switch (bolide.directon) {
+                case 0:
+                    bolide.y -= 30;
+                    break;
+                case 45:
+                    bolide.y -= 30;
+                    bolide.x += 30;
+                    break;
+                case 90:
+                    bolide.x += 30;
+                    break;
+                case 135:
+                    bolide.y += 30;
+                    bolide.x += 30;
+                    break;
+                case 180:
+                    bolide.y += 30;
+                    break;
+                case -45:
+                    bolide.y += 30;
+                    bolide.x -= 30;
+                    break;
+                case -90:
+                    bolide.x -= 30;
+                    break;
+                case -135:
+                    bolide.y -= 30;
+                    bolide.x -= 30;
+                    break;
+            }
+    }
+}
+const verifyColisionWall = () => {
+    for (let bolide of bolides) {
+        if (positionXBall == - sizeBall) { // left walls
+            directionBall = 90;
+            pointsPlayer2++;
+            resetPositions();
         }
-        switch (bolide.horizontalDirection) {
-            case "left":
-                bolide.x -= 30;
-                break;
-            case "right":
-                bolide.x += 30;
-                break;
+        if (positionXBall == canvas.width) {// right walls
+            directionBall = -90;
+            pointsPlayer1++;
+            resetPositions();
+        }
+        if (positionYBall == 0 || positionYBall == canvas.height - sizeBall) { //up and down walls
+            if (directionBall == 45 || directionBall == -135) {
+                directionBall += 90;
+
+            } else {
+                directionBall -= 90;
+            }
         }
     }
 }
