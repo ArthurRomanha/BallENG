@@ -102,7 +102,7 @@ for (let letter of randomWord) {
         letter: `${letter}`,
         x: randomX(),
         y: randomY(),
-        directon: randomDirection()
+        direction: randomDirection()
     })
 }
 console.log(bolides);
@@ -168,12 +168,12 @@ const drawSprites = () => {
     ctx.drawImage(ship, xShip, yShip, 30, 30);
     for (let bolide of bolides) {
         ctx.drawImage(document.getElementById(`meteor${bolide.letter}`), bolide.x, bolide.y, 30, 30);
+        moveBolides(bolide)
     }
 }
-const moveBolides = () => {
-    for (let bolide of bolides) {
-        if (bolide.y > 0 && bolide.y < canvas.height && bolide.x > 0 && bolide.x < canvas.width)
-            switch (bolide.directon) {
+const moveBolides = (bolide) => {
+        if (bolide.y > 0 && bolide.y < canvas.height - spriteSize && bolide.x > 0 && bolide.x < canvas.width - spriteSize){
+            switch (bolide.direction) {
                 case 0:
                     bolide.y -= 30;
                     break;
@@ -203,27 +203,18 @@ const moveBolides = () => {
                     bolide.x -= 30;
                     break;
             }
+    }else{
+        
     }
 }
 const verifyColisionWall = () => {
     for (let bolide of bolides) {
-        if (positionXBall == - sizeBall) { // left walls
-            directionBall = 90;
-            pointsPlayer2++;
-            resetPositions();
-        }
-        if (positionXBall == canvas.width) {// right walls
-            directionBall = -90;
-            pointsPlayer1++;
-            resetPositions();
-        }
-        if (positionYBall == 0 || positionYBall == canvas.height - sizeBall) { //up and down walls
-            if (directionBall == 45 || directionBall == -135) {
-                directionBall += 90;
-
-            } else {
-                directionBall -= 90;
-            }
+        if (bolide.x == 0 && bolide.x == canvas.width - spriteSize *2) { // left walls
+            bolide.direction = bolide.direction * -1;
+            moveBolides(bolide);
+        }else if (bolide.y == 0 && bolide.y == canvas.height - spriteSize *2) { //up and down walls
+            bolide.direction = bolide.direction *-1;
+            moveBolides(bolide);
         }
     }
 }
@@ -233,8 +224,8 @@ const game = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawSprites();
-    moveBolides();
     drawGrid();
+    verifyColisionWall();
 
     if (yShoot > 0) {
         drawShoot();
