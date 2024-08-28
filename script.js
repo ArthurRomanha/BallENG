@@ -5,6 +5,7 @@ const selectDifficult = document.querySelectorAll("#selectDifficult");
 const instructionsDescription = document.querySelector("#instructionsDescription");
 const btnContinue = document.querySelector("#continue");
 const ship = document.querySelector("#ship");
+let tileSize = 30;
 
 const words = [
     {
@@ -71,28 +72,20 @@ const words = [
 let bolides = [
 ];
 const randomX = () => {
-    return Math.floor(Math.random() * 15) * 30;
+    return Math.floor(Math.random() * 15) * tileSize;
 }
 const randomY = () => {
-    return Math.floor(Math.random() * 10) * 30;
+    return Math.floor(Math.random() * 10) * tileSize;
 }
 const randomDirection = () => {
-    switch (Math.floor(Math.random() * 8)) {
+    switch (Math.floor(Math.random() * 4)) {
         case 0:
-            return 0;
-        case 1:
             return 45;
-        case 2:
-            return 90;
-        case 3:
+        case 1:
             return 135;
-        case 4:
-            return 180;
-        case 5:
+        case 2:
             return -135;
-        case 6:
-            return -90;
-        case 7:
+        case 3:
             return -45;
     }
 }
@@ -112,17 +105,13 @@ let screen = 1;
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
-
-
-let spriteSize = 30;
-
-let xShip = canvas.width / 2 - spriteSize / 2;
-let yShip = canvas.height - spriteSize;
+let xShip = canvas.width / 2 - tileSize / 2;
+let yShip = canvas.height - tileSize;
 
 let shoot;
 let widthShoot = 5;
 
-let xShoot = xShip + spriteSize / 2 - widthShoot / 2;
+let xShoot = xShip + tileSize / 2 - widthShoot / 2;
 let yShoot = yShip;
 let shootExist = false;
 
@@ -150,7 +139,7 @@ const drawGrid = () => {
     ctx.lineWidth = 1
     ctx.strokeStyle = 'gray';
 
-    for (let i = 0; i < canvas.width + 30; i += 30) {//linhas verticais
+    for (let i = 0; i < canvas.width + tileSize; i += tileSize) {//linhas verticais
         ctx.beginPath();
         ctx.lineTo(i, 0)
         ctx.lineTo(i, canvas.height)
@@ -165,57 +154,48 @@ const drawGrid = () => {
 const drawSprites = () => {
     divScreens.style.display = "none";
     canvas.style.display = "block";
-    ctx.drawImage(ship, xShip, yShip, 30, 30);
+    ctx.drawImage(ship, xShip, yShip, tileSize, tileSize);
     for (let bolide of bolides) {
-        ctx.drawImage(document.getElementById(`meteor${bolide.letter}`), bolide.x, bolide.y, 30, 30);
-        moveBolides(bolide)
+        ctx.drawImage(document.getElementById(`meteor${bolide.letter}`), bolide.x, bolide.y, tileSize, tileSize);
+        moveBolides(bolide, false);
     }
 }
-const moveBolides = (bolide) => {
-        if (bolide.y > 0 && bolide.y < canvas.height - spriteSize && bolide.x > 0 && bolide.x < canvas.width - spriteSize){
-            switch (bolide.direction) {
-                case 0:
-                    bolide.y -= 30;
-                    break;
-                case 45:
-                    bolide.y -= 30;
-                    bolide.x += 30;
-                    break;
-                case 90:
-                    bolide.x += 30;
-                    break;
-                case 135:
-                    bolide.y += 30;
-                    bolide.x += 30;
-                    break;
-                case 180:
-                    bolide.y += 30;
-                    break;
-                case -45:
-                    bolide.y += 30;
-                    bolide.x -= 30;
-                    break;
-                case -90:
-                    bolide.x -= 30;
-                    break;
-                case -135:
-                    bolide.y -= 30;
-                    bolide.x -= 30;
-                    break;
-            }
-    }else{
-        
-    }
-}
-const verifyColisionWall = () => {
-    for (let bolide of bolides) {
-        if (bolide.x == 0 && bolide.x == canvas.width - spriteSize *2) { // left walls
-            bolide.direction = bolide.direction * -1;
-            moveBolides(bolide);
-        }else if (bolide.y == 0 && bolide.y == canvas.height - spriteSize *2) { //up and down walls
-            bolide.direction = bolide.direction *-1;
-            moveBolides(bolide);
+const moveBolides = (bolide, directionInvert) => {
+    if ((bolide.y > 0 && bolide.y < canvas.height - tileSize && bolide.x > 0 && bolide.x < canvas.width - tileSize) || directionInvert == true) {
+        switch (bolide.direction) {
+            case 45:
+                bolide.y -= tileSize;
+                bolide.x += tileSize;
+                break;
+            case 135:
+                bolide.y += tileSize;
+                bolide.x += tileSize;
+                break;
+            case -45:
+                bolide.y -= tileSize;
+                bolide.x -= tileSize;
+                break;
+            case -135:
+                bolide.y += tileSize;
+                bolide.x -= tileSize;
+                break;
         }
+    } else {
+        if (bolide.direction == 45) {
+            bolide.direction = -45;
+            moveBolides(bolide, true);
+        } else if(bolide.direction == -45){
+            bolide.direction = 45;
+            moveBolides(bolide, true);
+        }else if(bolide.direction == -135){
+            bolide.direction = 135;
+            moveBolides(bolide, true);
+        }else if(bolide.direction == 135){
+            bolide.direction = -135;
+            moveBolides(bolide, true);
+        }
+        
+        console.log(bolide.direction);
     }
 }
 const game = () => {
@@ -225,7 +205,6 @@ const game = () => {
 
     drawSprites();
     drawGrid();
-    verifyColisionWall();
 
     if (yShoot > 0) {
         drawShoot();
@@ -235,7 +214,7 @@ const game = () => {
 
     loopId = setTimeout(() => {
         game();
-    }, 100);
+    }, 150);
 }
 const nextScreen = () => {
     switch (screen) {
@@ -259,16 +238,16 @@ const nextScreen = () => {
 document.addEventListener('keydown', function (tecla) {
     switch (tecla.keyCode) {
         case 39://right
-            if (xShip < canvas.width - spriteSize) {
-                xShip += 30;
+            if (xShip < canvas.width - tileSize) {
+                xShip += tileSize;
             }
             break;
         case 37://left
-            if (xShip > 0) { xShip -= 30; }
+            if (xShip > 0) { xShip -= tileSize; }
             break;
         case 32:
             if (shootExist == false) {
-                xShoot = xShoot = xShip + spriteSize / 2 - widthShoot / 2;;
+                xShoot = xShoot = xShip + tileSize / 2 - widthShoot / 2;;
                 yShoot = yShip;
                 shootExist = true;
                 drawShoot();
