@@ -72,7 +72,7 @@ const words = [
 let bolides = [
 ];
 const randomX = () => {
-    return Math.floor(Math.random() * 15) * tileSize;
+    return Math.floor(Math.random() * 14) * tileSize;
 }
 const randomY = () => {
     return Math.floor(Math.random() * 10) * tileSize;
@@ -89,16 +89,21 @@ const randomDirection = () => {
             return -45;
     }
 }
-let randomWord = words[(Math.floor(Math.random() * 10))].name;
+// const canMove = () => {
+//     return true;
+// }
+//let randomWord = words[(Math.floor(Math.random() * 10))].name;
+let randomWord = 'I'
 for (let letter of randomWord) {
     bolides.push({
         letter: `${letter}`,
         x: randomX(),
         y: randomY(),
         direction: randomDirection()
+        // canMove: canMove()
     })
 }
-console.log(bolides);
+//console.log(bolides);
 let loopId;
 let screen = 1;
 
@@ -157,11 +162,10 @@ const drawSprites = () => {
     ctx.drawImage(ship, xShip, yShip, tileSize, tileSize);
     for (let bolide of bolides) {
         ctx.drawImage(document.getElementById(`meteor${bolide.letter}`), bolide.x, bolide.y, tileSize, tileSize);
-        moveBolides(bolide, false);
     }
 }
-const moveBolides = (bolide, directionInvert) => {
-    if ((bolide.y > 0 && bolide.y < canvas.height - tileSize && bolide.x > 0 && bolide.x < canvas.width - tileSize) || directionInvert == true) {
+setInterval(() => {
+    for (let bolide of bolides) {
         switch (bolide.direction) {
             case 45:
                 bolide.y -= tileSize;
@@ -180,24 +184,48 @@ const moveBolides = (bolide, directionInvert) => {
                 bolide.x -= tileSize;
                 break;
         }
-    } else {
-        if (bolide.direction == 45) {
-            bolide.direction = -45;
-            moveBolides(bolide, true);
-        } else if(bolide.direction == -45){
-            bolide.direction = 45;
-            moveBolides(bolide, true);
-        }else if(bolide.direction == -135){
-            bolide.direction = 135;
-            moveBolides(bolide, true);
-        }else if(bolide.direction == 135){
-            bolide.direction = -135;
-            moveBolides(bolide, true);
+        if (!((bolide.y > 0 && bolide.y < canvas.height - tileSize) && (bolide.x > 0 && bolide.x < canvas.width - tileSize))) {
+            bolide.direction = bolide.direction*-1;
         }
-        
-        console.log(bolide.direction);
+    
     }
-}
+}, 500)
+// const moveBolides = (bolide, directionInvert) => {
+//     if ((bolide.y >= 0 && bolide.y < canvas.height - tileSize) && (bolide.x > 0 && bolide.x < canvas.width - tileSize) || directionInvert == true) {
+//         if (bolide.direction == 45) {
+//             bolide.y -= tileSize;
+//             bolide.x += tileSize;
+//         }
+//         if (bolide.direction == 135) {
+//             bolide.y += tileSize;
+//             bolide.x += tileSize;
+//         }
+//         if (bolide.direction == -45) {
+//             bolide.y -= tileSize;
+//             bolide.x -= tileSize;
+//         }
+//         if (bolide.direction == -135) {
+//             bolide.y += tileSize;
+//             bolide.x -= tileSize;
+//         }
+//     } else {
+//         if (bolide.direction == 45) {
+//             bolide.direction = -45;
+//             moveBolides(bolide, true);
+//         } else if (bolide.direction == -45) {
+//             bolide.direction = 45;
+//             moveBolides(bolide, true);
+//         } else if (bolide.direction == -135) {
+//             bolide.direction = 135;
+//             moveBolides(bolide, true);
+//         } else if (bolide.direction == 135) {
+//             bolide.direction = -135;
+//             moveBolides(bolide, true);
+//         }
+
+//     //    console.log(bolide.direction);
+//     }
+// }
 const game = () => {
     clearInterval(loopId);
 
@@ -214,7 +242,7 @@ const game = () => {
 
     loopId = setTimeout(() => {
         game();
-    }, 150);
+    }, 250);
 }
 const nextScreen = () => {
     switch (screen) {
