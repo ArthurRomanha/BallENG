@@ -4,8 +4,12 @@ const secondScreen = document.querySelectorAll(".secondScreen");
 const selectDifficult = document.querySelectorAll("#selectDifficult");
 const instructionsDescription = document.querySelector("#instructionsDescription");
 const btnContinue = document.querySelector("#continue");
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
 const ship = document.querySelector("#ship");
 let tileSize = 30;
+let speedBolide = 5;
+let speedShoot = 20;
 
 const words = [
     {
@@ -107,9 +111,6 @@ for (let letter of randomWord) {
 let loopId;
 let screen = 1;
 
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
-
 let xShip = canvas.width / 2 - tileSize / 2;
 let yShip = canvas.height - tileSize;
 
@@ -124,7 +125,7 @@ const drawShoot = () => {
     if (shootExist == true) {
         ctx.fillStyle = "white";
         shoot = ctx.fillRect(xShoot, yShoot, 5, 15);
-        yShoot -= 15;
+        yShoot -= speedShoot;
     } else {
         yShoot = yShip;
         shootExist = true;
@@ -164,32 +165,40 @@ const drawSprites = () => {
         ctx.drawImage(document.getElementById(`meteor${bolide.letter}`), bolide.x, bolide.y, tileSize, tileSize);
     }
 }
-setInterval(() => {
+const moveBolide = () => {
     for (let bolide of bolides) {
         switch (bolide.direction) {
             case 45:
-                bolide.y -= tileSize;
-                bolide.x += tileSize;
+                bolide.y -= speedBolide;
+                bolide.x += speedBolide;
                 break;
             case 135:
-                bolide.y += tileSize;
-                bolide.x += tileSize;
+                bolide.y += speedBolide;
+                bolide.x += speedBolide;
                 break;
             case -45:
-                bolide.y -= tileSize;
-                bolide.x -= tileSize;
+                bolide.y -= speedBolide;
+                bolide.x -= speedBolide;
                 break;
             case -135:
-                bolide.y += tileSize;
-                bolide.x -= tileSize;
+                bolide.y += speedBolide;
+                bolide.x -= speedBolide;
                 break;
         }
-        if (!((bolide.y > 0 && bolide.y < canvas.height - tileSize) && (bolide.x > 0 && bolide.x < canvas.width - tileSize))) {
+        if (!((bolide.x > 0 && bolide.x < canvas.width - tileSize))) {
             bolide.direction = bolide.direction*-1;
+        }else if(!(bolide.y > 0 && bolide.y < canvas.height - tileSize)){
+            if (bolide.direction == 45 || bolide.direction == -135) {
+                bolide.direction += 90;
+    
+            } else {
+                bolide.direction -= 90;
+            }
+            
         }
     
     }
-}, 500)
+}
 // const moveBolides = (bolide, directionInvert) => {
 //     if ((bolide.y >= 0 && bolide.y < canvas.height - tileSize) && (bolide.x > 0 && bolide.x < canvas.width - tileSize) || directionInvert == true) {
 //         if (bolide.direction == 45) {
@@ -233,7 +242,7 @@ const game = () => {
 
     drawSprites();
     drawGrid();
-
+    moveBolide();
     if (yShoot > 0) {
         drawShoot();
     } else {
@@ -242,7 +251,7 @@ const game = () => {
 
     loopId = setTimeout(() => {
         game();
-    }, 250);
+    }, 40);
 }
 const nextScreen = () => {
     switch (screen) {
