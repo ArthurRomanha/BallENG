@@ -2,20 +2,28 @@ const divScreens = document.querySelector(".screens");
 const secondScreen = document.querySelectorAll(".secondScreen");
 const instructionsDescription = document.querySelector("#instructionsDescription");
 const btnContinue = document.querySelector(".continue");
+const btnStart = document.querySelector(".start");
 const divInfo = document.querySelector(".info");
 const clue = document.querySelector(".clue");
+const campMyWord = document.querySelector(".myWord");
+let myWord = []
+let speedGame = 150;
+let positionNextLetter = 0;
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 const tileSize = 30;
 let ship = {
-    img: document.querySelector("#ship"),
+    img: document.querySelector(".ship"),
     x: canvas.width / 2 - tileSize / 2,
     y: canvas.height - tileSize
 }
 let speedball = 15;
 let bullet;
 let game;
+
+let formedWord = "";
+
 const words = [
     {
         "name": "LIGHT",
@@ -42,7 +50,7 @@ const words = [
         "linkTranslator": "",
     },
     {
-        "name": "BROKE",
+        "name": "BROKEN",
         "image": "",
         "mean": "QUEBRADO",
         "linkTranslator": "",
@@ -112,6 +120,7 @@ const randomDirection = () => {
 let randomWord = words[(Math.floor(Math.random() * 10))];
 // let randomWord = 'I'
 for (let letter of randomWord.name) {
+    campMyWord.textContent += "_ ";
     balls.push({
         letter: `${letter}`,
         x: randomX(),
@@ -127,6 +136,7 @@ let screen = 1;
 let shoot = {
     x: ship.x,
     y: ship.y + tileSize,
+    img: document.querySelector(".shoot"),
     speed: 30,
     width: 30,
     height: 30,
@@ -134,14 +144,8 @@ let shoot = {
 };
 
 const winGame = () => {
-    fetch("dados.JSON").then((response) => {
-        response.json().then((object) => {
-            object.words.map((words) => {
-                divVictory.innerHTML += `<h1>${words.name}</h1>
-                                        <h2>${words.mean}</h2>`;
-            })
-        })
-    })
+    clearInterval(game);
+    canvas.style.display = "none";
 }
 const drawSprites = () => {
     divScreens.style.display = "none";
@@ -149,12 +153,13 @@ const drawSprites = () => {
     ctx.drawImage(ship.img, ship.x, ship.y, tileSize, tileSize);
     for (let ball of balls) {
         if (ball.exist) {
-            ctx.drawImage(document.getElementById(`meteor${ball.letter}`), ball.x, ball.y, tileSize, tileSize);
+            ctx.drawImage(document.getElementById(`ball${ball.letter}`), ball.x, ball.y, tileSize, tileSize);
+
         }
     }
     if (shoot.exist == true && shoot.y > 0) {
         ctx.fillStyle = "white";
-        bullet = ctx.fillRect(shoot.x, shoot.y, shoot.width, shoot.height);
+        bullet = ctx.drawImage(shoot.img, shoot.x, shoot.y, shoot.width, shoot.height);
         shoot.y -= shoot.speed;
     } else {
         shoot.y = ship.y;
@@ -163,12 +168,32 @@ const drawSprites = () => {
 }
 const moveAndColisionball = () => {
     for (let ball of balls) {
-        if ((ball.x == ship.x - 15 || ball.x == ship.x || ball.x == ship.x + 15) && (ball.y == ship.y - 15 || ball.y == ship.y || ball.y == ship.y + 15) && ball.exist) {
+        if ((ball.x == ship.x - 15 || ball.x == ship.x || ball.x == ship.x + 15) &&
+            (ball.y == ship.y - 15 || ball.y == ship.y || ball.y == ship.y + 15) &&
+            ball.exist) {
             gameOver();
         }
-        if ((ball.x == shoot.x - 15 || ball.x == shoot.x || ball.x == shoot.x + 15) && (ball.y == shoot.y - 15 || ball.y == shoot.y || ball.y == shoot.y + 15) && shoot.exist && ball.exist) {
+        if ((ball.x == shoot.x - 15 || ball.x == shoot.x || ball.x == shoot.x + 15) &&
+            (ball.y == shoot.y - 15 || ball.y == shoot.y || ball.y == shoot.y + 15) &&
+            shoot.exist && ball.exist) {
+            myWord.push(`${ball.letter} `);
             ball.exist = false;
             shoot.exist = false;
+            formedWord += ball.letter;
+            campMyWord.textContent = " ";
+            for (let i = 0; i < myWord.length; i++) {
+                campMyWord.textContent += `${myWord[i]} `;
+            }
+            for (let j = 0; j < randomWord.name.length - myWord.length; j++) {
+                campMyWord.textContent += "_ ";
+            }
+            if (formedWord.length == randomWord.name.length) {
+                if(formedWord == randomWord.name){
+                    winGame();
+                }else{
+                    gameOver();
+                }
+            }
         } else {
             switch (ball.direction) {
                 case 45:
@@ -223,7 +248,7 @@ const startGame = () => {
         moveAndColisionball();
 
 
-    }, 100);
+    }, speedGame);
 }
 const nextScreen = () => {
     switch (screen) {
@@ -235,13 +260,19 @@ const nextScreen = () => {
             break;
         case 2:
             divScreens.style.display = "none";
-            btnContinue.style.visibility = "hidden";
+            btnContinue.style.display = "none";
+            btnStart.style.display = "block";
             canvas.style.display = "block";
-            clue.innerHTML = `Palavra que quer dizer: ${randomWord.mean}`
-            startGame();
+            divInfo.style.display = "block";
+            clue.innerHTML = `A palavra é: <bold>${randomWord.name}</bold>`;
+            drawSprites();
             break;
     }
 }
+btnStart.addEventListener('click', () => {
+    btnStart.style.display = "none";
+    startGame()
+})
 document.addEventListener('keydown', function (tecla) {
     switch (tecla.keyCode) {
         case 39://right
