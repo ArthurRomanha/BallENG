@@ -223,7 +223,7 @@ const startGame = () => {
         moveAndColisionball();
 
 
-    }, 200);
+    }, 100);
 }
 const nextScreen = () => {
     switch (screen) {
