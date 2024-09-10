@@ -7,12 +7,16 @@ html{
     color: white;
 }
 body{
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: 20% 60% 20%;
+    justify-items: center;
     text-align: center;
     align-items: center;
 }
-h1{
+.gameName{
+    grid-column: 2;
     color: white;
 }
 .red{
@@ -21,24 +25,32 @@ h1{
 .secondScreen{
     visibility: hidden;
 }
-.bolides{
+.screens{
+    grid-column: 2;
+    grid-row: 2;
+}
+.containerGame{
     display: none;
 }
-#selectDifficult{
-    visibility: hidden;
-    display: flex;
-    justify-content: space-evenly;
+.info{
+    grid-row: 2;
+    grid-column: 3;
+    display: none;
 }
 canvas{
+    grid-column: 2;
+    grid-row: 2;
     display: none;
     border: 3px solid white;    
 }
-#ship{
+.preLoadAssets{
     display: none;
 }
-.victory{
-    display: none;
-}
-img{
-    display: none;
+.continue{
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 3px;
+    margin: 0 10px;
+    grid-row: 3;
+    grid-column: 2;
 }

@@ -10,52 +10,58 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
 </head>
-<header></header>
 
 <body>
-    <h1 class="gameName">BOLID<span class="red">ENG</span></h1>
+    <h1 class="gameName">BALL<span class="red">ENG</span></h1>
+
     <section class="screens">
         <h3 class="secondScreen" id="instructions">Instructions:</h3>
-        <div id="selectDifficult">
-            <button class="difficult" onclick="game()">Fácil</button>
-            <button class="difficult" onclick="game()">Médio</button>
-            <button class="difficult" onclick="game()">Difícil</button>
-        </div>
         <p class="secondScreen" id="instructionsDescription">Use a seta para a esquerda e para a direita para mover o
             cursor e use a barra de espaço para atirar</p>
-        <button id="continue" onclick="nextScreen()">Continue</button>
     </section>
-    <img src="img/meteorA">
-    <canvas width="570px" height="450px"></canvas>
-    <img src="img/ship.webp" id="ship">
 
-    <img src="img/meteorA" id="meteorA" class="bolides">
-    <img src="img/meteorB" id="meteorB" class="bolides">
-    <img src="img/meteorC" id="meteorC" class="bolides">
-    <img src="img/meteorD" id="meteorD" class="bolides">
-    <img src="img/meteorE" id="meteorE" class="bolides">
-    <img src="img/meteorF" id="meteorF" class="bolides">
-    <img src="img/meteorG" id="meteorG" class="bolides">
-    <img src="img/meteorH" id="meteorH" class="bolides">
-    <img src="img/meteorI" id="meteorI" class="bolides">
-    <img src="img/meteorJ" id="meteorJ" class="bolides">
-    <img src="img/meteorK" id="meteorK" class="bolides">
-    <img src="img/meteorL" id="meteorL" class="bolides">
-    <img src="img/meteorM" id="meteorM" class="bolides">
-    <img src="img/meteorN" id="meteorN" class="bolides">
-    <img src="img/meteorO" id="meteorO" class="bolides">
-    <img src="img/meteorP" id="meteorP" class="bolides">
-    <img src="img/meteorQ" id="meteorQ" class="bolides">
-    <img src="img/meteorR" id="meteorR" class="bolides">
-    <img src="img/meteorS" id="meteorS" class="bolides">
-    <img src="img/meteorT" id="meteorT" class="bolides">
-    <img src="img/meteorU.jpg" id="meteorU" class="bolides">
-    <img src="img/meteorV.jpg" id="meteorV" class="bolides">
-    <img src="img/meteorW.jpg" id="meteorW" class="bolides">
-    <img src="img/meteorX.jpg" id="meteorX" class="bolides">
-    <img src="img/meteorY.jpg" id="meteorY" class="bolides">
-    <img src="img/meteorZ.jpg" id="meteorZ" class="bolides">
-    <div class="victory"></div>
+    <canvas width="510px" height="420px"></canvas>
+
+    <div class="info">
+        <h5 class="clue"></h5>
+    </div>
+
+    <div class="victory">
+
+    </div>
+
+    <div class="preLoadAssets">
+        <img src="img/ship.webp" id="ship">
+
+        <img src="img/a.png" id="meteorA" class="balls">
+        <img src="img/b.png" id="meteorB" class="balls">
+        <img src="img/c.png" id="meteorC" class="balls">
+        <img src="img/d.png" id="meteorD" class="balls">
+        <img src="img/e.png" id="meteorE" class="balls">
+        <img src="img/f.png" id="meteorF" class="balls">
+        <img src="img/g.png" id="meteorG" class="balls">
+        <img src="img/h.png" id="meteorH" class="balls">
+        <img src="img/i.png" id="meteorI" class="balls">
+        <img src="img/j.png" id="meteorJ" class="balls">
+        <img src="img/k.png" id="meteorK" class="balls">
+        <img src="img/l.png" id="meteorL" class="balls">
+        <img src="img/m.png" id="meteorM" class="balls">
+        <img src="img/n.png" id="meteorN" class="balls">
+        <img src="img/o.png" id="meteorO" class="balls">
+        <img src="img/p.png" id="meteorP" class="balls">
+        <img src="img/q.png" id="meteorQ" class="balls">
+        <img src="img/r.png" id="meteorR" class="balls">
+        <img src="img/s.png" id="meteorS" class="balls">
+        <img src="img/t.png" id="meteorT" class="balls">
+        <img src="img/u.png" id="meteorU" class="balls">
+        <img src="img/v.png" id="meteorV" class="balls">
+        <img src="img/w.png" id="meteorW" class="balls">
+        <img src="img/x.png" id="meteorX" class="balls">
+        <img src="img/y.png" id="meteorY" class="balls">
+        <img src="img/z.png" id="meteorZ" class="balls">
+    </div>
+    <button class="continue" onclick="nextScreen()">Continue</button>
+
     <script src="script.js"></script>
 </body>
 <footer></footer>

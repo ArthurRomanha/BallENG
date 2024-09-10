@@ -1,85 +1,98 @@
-const divVictory = document.querySelector(".victory");
 const divScreens = document.querySelector(".screens");
 const secondScreen = document.querySelectorAll(".secondScreen");
-const selectDifficult = document.querySelectorAll("#selectDifficult");
 const instructionsDescription = document.querySelector("#instructionsDescription");
-const btnContinue = document.querySelector("#continue");
+const btnContinue = document.querySelector(".continue");
+const divInfo = document.querySelector(".info");
+const clue = document.querySelector(".clue");
+
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
-const ship = document.querySelector("#ship");
-let tileSize = 30;
-let speedBolide = 15;
-let speedShoot = 20;
-
+const tileSize = 30;
+let ship = {
+    img: document.querySelector("#ship"),
+    x: canvas.width / 2 - tileSize / 2,
+    y: canvas.height - tileSize
+}
+let speedball = 15;
+let bullet;
+let game;
 const words = [
     {
         "name": "LIGHT",
         "image": "",
         "mean": "LUZ",
-        "linkTranslator": ""
+        "linkTranslator": "",
     },
     {
         "name": "COUNTRY",
         "image": "",
         "mean": "PAÍS",
-        "linkTranslator": ""
+        "linkTranslator": "",
     },
     {
         "name": "PICTURE",
         "image": "",
         "mean": "FOTO",
-        "linkTranslator": ""
+        "linkTranslator": "",
     },
     {
         "name": "WAITER",
         "image": "",
         "mean": "GARÇOM",
-        "linkTranslator": ""
+        "linkTranslator": "",
     },
     {
         "name": "BROKE",
         "image": "",
         "mean": "QUEBRADO",
-        "linkTranslator": ""
+        "linkTranslator": "",
     },
     {
         "name": "ACCENT",
         "image": "",
         "mean": "SOTAQUE",
-        "linkTranslator": ""
+        "linkTranslator": "",
     },
     {
         "name": "BONES",
         "image": "",
         "mean": "OSSOS",
-        "linkTranslator": ""
+        "linkTranslator": "",
     },
     {
         "name": "CARRY",
         "image": "",
         "mean": "CARREGAR",
-        "linkTranslator": ""
+        "linkTranslator": "",
     },
     {
         "name": "TEETH",
         "image": "",
         "mean": "DENTE",
-        "linkTranslator": ""
+        "linkTranslator": "",
     },
     {
         "name": "TENT",
         "image": "",
         "mean": "CABANA",
-        "linkTranslator": ""
+        "linkTranslator": "",
     }
 ]
-let bolides = [
+let balls = [
 ];
 const randomX = () => {
-    return Math.floor(Math.random() * 14) * tileSize;
+    let x = Math.floor(Math.random() * 14) * tileSize;
+    while (x == 0) {
+        x = Math.floor(Math.random() * 14) * tileSize;
+    }
+    return x;
 }
 const randomY = () => {
-    return Math.floor(Math.random() * 10) * tileSize;
+    let y = Math.floor(Math.random() * 10) * tileSize;
+    while (y == 0) {
+        y = Math.floor(Math.random() * 14) * tileSize;
+    }
+    return y;
 }
 const randomDirection = () => {
     switch (Math.floor(Math.random() * 4)) {
@@ -96,41 +109,30 @@ const randomDirection = () => {
 // const canMove = () => {
 //     return true;
 // }
-let randomWord = words[(Math.floor(Math.random() * 10))].name;
+let randomWord = words[(Math.floor(Math.random() * 10))];
 // let randomWord = 'I'
-for (let letter of randomWord) {
-    bolides.push({
+for (let letter of randomWord.name) {
+    balls.push({
         letter: `${letter}`,
         x: randomX(),
         y: randomY(),
-        direction: randomDirection()
-        // canMove: canMove()
+        direction: randomDirection(),
+        exist: true
     })
 }
-//console.log(bolides);
+//console.log(balls);
 let loopId;
 let screen = 1;
 
-let xShip = canvas.width / 2 - tileSize / 2;
-let yShip = canvas.height - tileSize;
+let shoot = {
+    x: ship.x,
+    y: ship.y + tileSize,
+    speed: 30,
+    width: 30,
+    height: 30,
+    exist: false
+};
 
-let shoot;
-let widthShoot = 5;
-
-let xShoot = xShip + tileSize / 2 - widthShoot / 2;
-let yShoot = yShip;
-let shootExist = false;
-
-const drawShoot = () => {
-    if (shootExist == true) {
-        ctx.fillStyle = "white";
-        shoot = ctx.fillRect(xShoot, yShoot, 5, 15);
-        yShoot -= speedShoot;
-    } else {
-        yShoot = yShip;
-        shootExist = true;
-    }
-}
 const winGame = () => {
     fetch("dados.JSON").then((response) => {
         response.json().then((object) => {
@@ -141,125 +143,87 @@ const winGame = () => {
         })
     })
 }
-const drawGrid = () => {
-    ctx.lineWidth = 1
-    ctx.strokeStyle = 'gray';
-
-    for (let i = 0; i < canvas.width + tileSize; i += tileSize) {//linhas verticais
-        ctx.beginPath();
-        ctx.lineTo(i, 0)
-        ctx.lineTo(i, canvas.height)
-        ctx.stroke()
-
-        ctx.beginPath();
-        ctx.lineTo(0, i);
-        ctx.lineTo(canvas.width, i);
-        ctx.stroke();
-    }
-}
 const drawSprites = () => {
     divScreens.style.display = "none";
     canvas.style.display = "block";
-    ctx.drawImage(ship, xShip, yShip, tileSize, tileSize);
-    for (let bolide of bolides) {
-        ctx.drawImage(document.getElementById(`meteor${bolide.letter}`), bolide.x, bolide.y, tileSize, tileSize);
-    }
-}
-const moveBolide = () => {
-    for (let bolide of bolides) {
-        switch (bolide.direction) {
-            case 45:
-                bolide.y -= speedBolide;
-                bolide.x += speedBolide;
-                break;
-            case 135:
-                bolide.y += speedBolide;
-                bolide.x += speedBolide;
-                break;
-            case -45:
-                bolide.y -= speedBolide;
-                bolide.x -= speedBolide;
-                break;
-            case -135:
-                bolide.y += speedBolide;
-                bolide.x -= speedBolide;
-                break;
-        }if((bolide.x == 0 && bolide.y == 0) || //up and left corner
-            (bolide.x == canvas.width - tileSize && bolide.y == 0) || //up and right corner
-            (bolide.x == 0                 && bolide.y == canvas.height - tileSize)||//down and left corner
-            (bolide.x == canvas.width - tileSize && bolide.y == canvas.height - tileSize)) { //down and right corner
-            if ((bolide.direction == 45)||(bolide.direction == 135)) {
-                    bolide.direction -= 180;
-                }else{
-                    bolide.direction += 180;
-                }
-        } else if (!((bolide.x > 0 && bolide.x < canvas.width - tileSize))) {
-            bolide.direction = bolide.direction * -1;
-        } else if (!(bolide.y > 0 && bolide.y < canvas.height - tileSize)) {
-            if (bolide.direction == 45 || bolide.direction == -135) {
-                bolide.direction += 90;
-
-            } else {
-                bolide.direction -= 90;
-            }
-
+    ctx.drawImage(ship.img, ship.x, ship.y, tileSize, tileSize);
+    for (let ball of balls) {
+        if (ball.exist) {
+            ctx.drawImage(document.getElementById(`meteor${ball.letter}`), ball.x, ball.y, tileSize, tileSize);
         }
-
+    }
+    if (shoot.exist == true && shoot.y > 0) {
+        ctx.fillStyle = "white";
+        bullet = ctx.fillRect(shoot.x, shoot.y, shoot.width, shoot.height);
+        shoot.y -= shoot.speed;
+    } else {
+        shoot.y = ship.y;
+        shoot.exist = false;
     }
 }
-// const moveBolides = (bolide, directionInvert) => {
-//     if ((bolide.y >= 0 && bolide.y < canvas.height - tileSize) && (bolide.x > 0 && bolide.x < canvas.width - tileSize) || directionInvert == true) {
-//         if (bolide.direction == 45) {
-//             bolide.y -= tileSize;
-//             bolide.x += tileSize;
-//         }
-//         if (bolide.direction == 135) {
-//             bolide.y += tileSize;
-//             bolide.x += tileSize;
-//         }
-//         if (bolide.direction == -45) {
-//             bolide.y -= tileSize;
-//             bolide.x -= tileSize;
-//         }
-//         if (bolide.direction == -135) {
-//             bolide.y += tileSize;
-//             bolide.x -= tileSize;
-//         }
-//     } else {
-//         if (bolide.direction == 45) {
-//             bolide.direction = -45;
-//             moveBolides(bolide, true);
-//         } else if (bolide.direction == -45) {
-//             bolide.direction = 45;
-//             moveBolides(bolide, true);
-//         } else if (bolide.direction == -135) {
-//             bolide.direction = 135;
-//             moveBolides(bolide, true);
-//         } else if (bolide.direction == 135) {
-//             bolide.direction = -135;
-//             moveBolides(bolide, true);
-//         }
+const moveAndColisionball = () => {
+    for (let ball of balls) {
+        if ((ball.x == ship.x - 15 || ball.x == ship.x || ball.x == ship.x + 15) && (ball.y == ship.y - 15 || ball.y == ship.y || ball.y == ship.y + 15) && ball.exist) {
+            gameOver();
+        }
+        if ((ball.x == shoot.x - 15 || ball.x == shoot.x || ball.x == shoot.x + 15) && (ball.y == shoot.y - 15 || ball.y == shoot.y || ball.y == shoot.y + 15) && shoot.exist && ball.exist) {
+            ball.exist = false;
+            shoot.exist = false;
+        } else {
+            switch (ball.direction) {
+                case 45:
+                    ball.y -= speedball;
+                    ball.x += speedball;
+                    break;
+                case 135:
+                    ball.y += speedball;
+                    ball.x += speedball;
+                    break;
+                case -45:
+                    ball.y -= speedball;
+                    ball.x -= speedball;
+                    break;
+                case -135:
+                    ball.y += speedball;
+                    ball.x -= speedball;
+                    break;
+            }
+            if ((ball.x == 0 && ball.y == 0) || //up and left corner
+                (ball.x == canvas.width - tileSize && ball.y == 0) || //up and right corner
+                (ball.x == 0 && ball.y == canvas.height - tileSize) ||//down and left corner
+                (ball.x == canvas.width - tileSize && ball.y == canvas.height - tileSize)) { //down and right corner
+                if ((ball.direction == 45) || (ball.direction == 135)) {
+                    ball.direction -= 180;
+                } else {
+                    ball.direction += 180;
+                }
+            } else if (!((ball.x > 0 && ball.x < canvas.width - tileSize))) {
+                ball.direction = ball.direction * -1;
+            } else if (!(ball.y > 0 && ball.y < canvas.height - tileSize)) {
+                if (ball.direction == 45 || ball.direction == -135) {
+                    ball.direction += 90;
 
-//     //    console.log(bolide.direction);
-//     }
-// }
-const game = () => {
-    clearInterval(loopId);
+                } else {
+                    ball.direction -= 90;
+                }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    drawSprites();
-    drawGrid();
-    moveBolide();
-    if (yShoot > 0) {
-        drawShoot();
-    } else {
-        shootExist = false;
+            }
+        }
     }
+}
+const gameOver = () => {
+    clearInterval(game)
+}
+const startGame = () => {
+    game = setInterval(() => {
 
-    loopId = setTimeout(() => {
-        game();
-    }, 40);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawSprites();
+        moveAndColisionball();
+
+
+    }, 100);
 }
 const nextScreen = () => {
     switch (screen) {
@@ -270,32 +234,29 @@ const nextScreen = () => {
             screen++;
             break;
         case 2:
-            instructionsDescription.style.visibility = "hidden";
-            btnContinue.style.visibility = "hidden"
-
-            selectDifficult.forEach(element => {
-                element.style.visibility = "visible";
-            });
-            game();
+            divScreens.style.display = "none";
+            btnContinue.style.visibility = "hidden";
+            canvas.style.display = "block";
+            clue.innerHTML = `Palavra que quer dizer: ${randomWord.mean}`
+            startGame();
             break;
     }
 }
 document.addEventListener('keydown', function (tecla) {
     switch (tecla.keyCode) {
         case 39://right
-            if (xShip < canvas.width - tileSize) {
-                xShip += tileSize;
+            if (ship.x < canvas.width - tileSize) {
+                ship.x += tileSize;
             }
             break;
         case 37://left
-            if (xShip > 0) { xShip -= tileSize; }
+            if (ship.x > 0) { ship.x -= tileSize; }
             break;
         case 32:
-            if (shootExist == false) {
-                xShoot = xShoot = xShip + tileSize / 2 - widthShoot / 2;;
-                yShoot = yShip;
-                shootExist = true;
-                drawShoot();
+            if (shoot.exist == false) {
+                shoot.x = ship.x;
+                shoot.y = ship.y + tileSize;
+                shoot.exist = true;
             }
             break;
     }
