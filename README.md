@@ -1,2 +1,2 @@
 # BALLENG
-Projeto desenvolvido com HTML, CSS, JavaScript e JSON para exercitar meus aprendizados
+Projeto desenvolvido com HTML, CSS e JavaScript para exercitar meus aprendizados
