@@ -6,8 +6,13 @@ const btnStart = document.querySelector(".start");
 const divInfo = document.querySelector(".info");
 const clue = document.querySelector(".clue");
 const campMyWord = document.querySelector(".myWord");
+const divVictory = document.querySelector(".victory");
+const divLoose = document.querySelector(".loose");
+const wordImage = document.querySelector(".wordImage");
+const mean = document.querySelector(".mean");
+
 let myWord = []
-let speedGame = 150;
+let speedGame = 100;
 let positionNextLetter = 0;
 
 const canvas = document.querySelector('canvas');
@@ -27,78 +32,68 @@ let formedWord = "";
 const words = [
     {
         "name": "LIGHT",
-        "image": "",
-        "mean": "LUZ",
-        "linkTranslator": "",
+        "image": "img/imagesWords/light.webp",
+        "mean": "LUZ"
     },
     {
         "name": "COUNTRY",
-        "image": "",
+        "image": "img/imagesWords/country.webp",
         "mean": "PAÍS",
-        "linkTranslator": "",
     },
     {
         "name": "PICTURE",
-        "image": "",
-        "mean": "FOTO",
-        "linkTranslator": "",
+        "image": "img/imagesWords/picture.webp",
+        "mean": "FOTO"
     },
     {
         "name": "WAITER",
-        "image": "",
-        "mean": "GARÇOM",
-        "linkTranslator": "",
+        "image": "img/imagesWords/waiter.webp",
+        "mean": "GARÇOM"
     },
     {
         "name": "BROKEN",
-        "image": "",
-        "mean": "QUEBRADO",
-        "linkTranslator": "",
+        "image": "img/imagesWords/broken.webp",
+        "mean": "QUEBRADO"
     },
     {
-        "name": "ACCENT",
-        "image": "",
-        "mean": "SOTAQUE",
-        "linkTranslator": "",
+        "name": "HEIGHT",
+        "image": "img/imagesWords/height.webp",
+        "mean": "ALTURA"
     },
     {
         "name": "BONES",
-        "image": "",
-        "mean": "OSSOS",
-        "linkTranslator": "",
+        "image": "img/imagesWords/bones.webp",
+        "mean": "OSSOS"
     },
     {
         "name": "CARRY",
-        "image": "",
-        "mean": "CARREGAR",
-        "linkTranslator": "",
+        "image": "img/imagesWords/carry.webp",
+        "mean": "CARREGAR"
     },
     {
         "name": "TEETH",
-        "image": "",
-        "mean": "DENTE",
-        "linkTranslator": "",
+        "image": "img/imagesWords/teeth.webp",
+        "mean": "DENTE"
     },
     {
         "name": "TENT",
-        "image": "",
-        "mean": "CABANA",
-        "linkTranslator": "",
+        "image": "img/imagesWords/tent.webp",
+        "mean": "CABANA"
     }
 ]
 let balls = [
 ];
 const randomX = () => {
     let x = Math.floor(Math.random() * 14) * tileSize;
-    while (x == 0) {
+    while (x <= 0) {
         x = Math.floor(Math.random() * 14) * tileSize;
     }
     return x;
 }
 const randomY = () => {
     let y = Math.floor(Math.random() * 10) * tileSize;
-    while (y == 0) {
-        y = Math.floor(Math.random() * 14) * tileSize;
+    while (y <= 0) {
+        y = Math.floor(Math.random() * 10) * tileSize;
     }
     return y;
 }
@@ -146,6 +141,19 @@ let shoot = {
 const winGame = () => {
     clearInterval(game);
     canvas.style.display = "none";
+    divVictory.style.display = "block";
+    wordImage.src = `img/imagesWords/${randomWord.name}.webp`;
+    mean.textContent = `A palavra ${randomWord.name} significa: ${randomWord.mean}`;
+}
+
+const gameOver = () => {
+    clearInterval(game)
+    canvas.style.display = "none";
+    divLoose.style.display = "block";
+
+}
+const reload = () => {
+    window.location.reload();
 }
 const drawSprites = () => {
     divScreens.style.display = "none";
@@ -235,9 +243,6 @@ const moveAndColisionball = () => {
             }
         }
     }
-}
-const gameOver = () => {
-    clearInterval(game)
 }
 const startGame = () => {
     game = setInterval(() => {

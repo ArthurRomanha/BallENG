@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title></title>
+    <title>BALLENG</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,9 +15,8 @@
     <h1 class="gameName">BALL<span class="red">ENG</span></h1>
 
     <section class="screens">
-        <h3 class="secondScreen" id="instructions">Instructions:</h3>
-        <p class="secondScreen" id="instructionsDescription">Use a seta para a esquerda e para a direita para mover o
-            cursor e use a barra de espaço para atirar</p>
+        <h1 class="secondScreen" id="instructions">Instructions:</h1>
+        <p class="secondScreen" id="instructionsDescription">Use a seta para a esquerda e para a direita para mover a nave e atire nas letras de acordo com a ordem da palavra usando a barra de espaço</p>
     </section>
 
     <canvas width="510px" height="420px"></canvas>
@@ -30,40 +29,49 @@
     </div>
 
     <div class="victory">
+        <h2>Congratulations!</h2>
+        <img src="" class="wordImage">
+        <h3 class="mean"></h3>
+        <button onclick="reload()">Jogar de novo</button>
+    </div>
 
+    <div class="loose">
+        <h2>Game Over!</h2>
+        <button onclick="reload()">Try Again</button>
     </div>
 
     <div class="preLoadAssets">
-        <img src="img/ship.png" class="ship">
-        <img src="img/shoot.png" class="shoot">
+        <img src="img/sprites/ship.png" class="ship">
+        <img src="img/sprites/shoot.png" class="shoot">
 
-        <img src="img/a.png" id="ballA" class="balls">
-        <img src="img/b.png" id="ballB" class="balls">
-        <img src="img/c.png" id="ballC" class="balls">
-        <img src="img/d.png" id="ballD" class="balls">
-        <img src="img/e.png" id="ballE" class="balls">
-        <img src="img/f.png" id="ballF" class="balls">
-        <img src="img/g.png" id="ballG" class="balls">
-        <img src="img/h.png" id="ballH" class="balls">
-        <img src="img/i.png" id="ballI" class="balls">
-        <img src="img/j.png" id="ballJ" class="balls">
-        <img src="img/k.png" id="ballK" class="balls">
-        <img src="img/l.png" id="ballL" class="balls">
-        <img src="img/m.png" id="ballM" class="balls">
-        <img src="img/n.png" id="ballN" class="balls">
-        <img src="img/o.png" id="ballO" class="balls">
-        <img src="img/p.png" id="ballP" class="balls">
-        <img src="img/q.png" id="ballQ" class="balls">
-        <img src="img/r.png" id="ballR" class="balls">
-        <img src="img/s.png" id="ballS" class="balls">
-        <img src="img/t.png" id="ballT" class="balls">
-        <img src="img/u.png" id="ballU" class="balls">
-        <img src="img/v.png" id="ballV" class="balls">
-        <img src="img/w.png" id="ballW" class="balls">
-        <img src="img/x.png" id="ballX" class="balls">
-        <img src="img/y.png" id="ballY" class="balls">
-        <img src="img/z.png" id="ballZ" class="balls">
+        <img src="img/sprites/a.png" id="ballA" class="balls">
+        <img src="img/sprites/b.png" id="ballB" class="balls">
+        <img src="img/sprites/c.png" id="ballC" class="balls">
+        <img src="img/sprites/d.png" id="ballD" class="balls">
+        <img src="img/sprites/e.png" id="ballE" class="balls">
+        <img src="img/sprites/f.png" id="ballF" class="balls">
+        <img src="img/sprites/g.png" id="ballG" class="balls">
+        <img src="img/sprites/h.png" id="ballH" class="balls">
+        <img src="img/sprites/i.png" id="ballI" class="balls">
+        <img src="img/sprites/j.png" id="ballJ" class="balls">
+        <img src="img/sprites/k.png" id="ballK" class="balls">
+        <img src="img/sprites/l.png" id="ballL" class="balls">
+        <img src="img/sprites/m.png" id="ballM" class="balls">
+        <img src="img/sprites/n.png" id="ballN" class="balls">
+        <img src="img/sprites/o.png" id="ballO" class="balls">
+        <img src="img/sprites/p.png" id="ballP" class="balls">
+        <img src="img/sprites/q.png" id="ballQ" class="balls">
+        <img src="img/sprites/r.png" id="ballR" class="balls">
+        <img src="img/sprites/s.png" id="ballS" class="balls">
+        <img src="img/sprites/t.png" id="ballT" class="balls">
+        <img src="img/sprites/u.png" id="ballU" class="balls">
+        <img src="img/sprites/v.png" id="ballV" class="balls">
+        <img src="img/sprites/w.png" id="ballW" class="balls">
+        <img src="img/sprites/x.png" id="ballX" class="balls">
+        <img src="img/sprites/y.png" id="ballY" class="balls">
+        <img src="img/sprites/z.png" id="ballZ" class="balls">
     </div>
+
     <button class="continue" onclick="nextScreen()">Continue</button>
 
     <script src="script.js"></script>
