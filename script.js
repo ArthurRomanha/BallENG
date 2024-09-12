@@ -143,7 +143,7 @@ const winGame = () => {
     canvas.style.display = "none";
     divVictory.style.display = "block";
     wordImage.src = `img/imagesWords/${randomWord.name}.webp`;
-    mean.textContent = `A palavra ${randomWord.name} significa: ${randomWord.mean}`;
+    mean.textContent = `A palavra ${randomWord.name} significa ${randomWord.mean}`;
 }
 
 const gameOver = () => {
